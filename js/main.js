@@ -128,6 +128,8 @@ function prepare(){
     let n = s.indexOf('{');
     s = s.substring(n+1,s.length-1);
     editor.setValue(s);
+    //
+    run();
 }
 
 
