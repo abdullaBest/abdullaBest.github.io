@@ -1,5 +1,15 @@
 let editor, render, scene, camera, controls, gridHelper, mesh=null;
 let clearcolor = 0x5f5f5f;
+let spisok = [
+    {
+        name : 'кристал',
+        code : gen_crystals_code.toString(),
+    },
+    {
+        name : 'дерево',
+        code : gen_tree_code.toString(),
+    },
+    ]
 
 function reSize(){
     //
@@ -71,7 +81,14 @@ function run(){
     scene.add(mesh);
 }
 
-
+function sel_code(i){
+    let s = spisok[i].code
+    let n = s.indexOf('{');
+    s = s.substring(n+1,s.length-1);
+    editor.setValue(s);
+    //
+    run();
+}
 
 function prepare(){
     let pstyle = 'background-color: #F5F6F7; border: 1px solid #dfdfdf; padding: 5px;';
@@ -108,11 +125,20 @@ function prepare(){
         enableLiveAutocompletion: true
     });
     //
+    let h = '';
+    for (let i=0;i<spisok.length;i++){
+        h = h+'<div class="menu_item" onclick="sel_code('+i+')">'+spisok[i].name+'</div>';
+    }
+    //
     w2ui.layout.content('top','<div id="toolbar"></div>');
     $('#toolbar').w2toolbar({
         name: 'toolbar',
         items: [
             { type: 'button', id: 'run', text: 'Запустить', icon: 'fa-wrench' },
+            { type: 'break' },
+            { type: 'drop',  id: 'spisok', text: 'Список', icon: 'fa-star',
+                html: '<div style="padding: 10px; line-height: 1.5">'+h+'</div>'
+            },
         ],
         onClick: function (event) {
             if (event.target==='run'){
@@ -124,12 +150,7 @@ function prepare(){
     //
     initRender();
     //
-    let s = gen_crystals_code.toString();
-    let n = s.indexOf('{');
-    s = s.substring(n+1,s.length-1);
-    editor.setValue(s);
-    //
-    run();
+    sel_code(0);
 }
 
 
